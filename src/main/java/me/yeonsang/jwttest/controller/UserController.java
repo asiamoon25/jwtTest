@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Collections;
 import java.util.Map;
 
 @RequiredArgsConstructor
@@ -24,7 +25,8 @@ public class UserController {
         return userRepository.save(User.builder()
                 .email(user.get("email"))
                 .password(passwordEncoder.encode(user.get("password")))
-                .roles()
-        )
+                .roles(Collections.singletonList("ROLE_USER"))
+                .build()).getId();
+
     }
 }
