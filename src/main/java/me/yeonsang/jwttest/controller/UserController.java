@@ -29,4 +29,14 @@ public class UserController {
                 .build()).getId();
 
     }
+
+    @PostMapping("/login")
+    public String login(@RequestBody Map<String,String>user){
+        User member = userRepository.findByEmail(user.get("email"))
+                .orElseThrow(()-> new IllegalArgumentException("가입되지 않은 Email"));
+        if(!passwordEncoder.matches(user.get("password"), member.getPassword())) {
+            throw new IllegalArgumentException("잘못된 비밀번호");
+        }
+        return jwtTokenProvider.createToken(member.getUsername(), member.getRoles());
+    }
 }
